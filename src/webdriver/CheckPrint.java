@@ -12,7 +12,7 @@ public void Recondition()
 	{
 	System.out.println("chuan bi data va moi truong test");	
 	}	
-	
+	//fhjdkhfjkghkfhg
 @Test
 public void TC01()
 {
