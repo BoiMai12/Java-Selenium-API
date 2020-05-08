@@ -40,9 +40,9 @@ public void LeadtoAccountPage ()
 @Test
 public void TC_01_LoginEmptyUsernameAndPass() {
 	// Login Page Url matching
-	driver.findElement(By.xpath(".//*[@id='send2']")).click();
+	driver.findElement(By.id("send2")).click();
 	driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-	String mess1= driver.findElement(By.xpath(".//*[@id='advice-required-entry-email']")).getText();
+	String mess1= driver.findElement(By.id("advice-required-entry-email")).getText();
 	//System.out.println(mess1);
 	Assert.assertEquals(mess1, "This is a required field.");
 	//System.out.println("Pass TC_01");
@@ -53,11 +53,25 @@ public void TC_02_LoginInvalidEmail() {
 	// Login Page Url matching
 	driver.navigate().refresh();
 	driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-	driver.findElement(By.xpath(".//*[@id='email']")).sendKeys("123423234@123455.123123");
+	driver.findElement(By.id("email")).sendKeys("123423234@123455.123123");
 	driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-	driver.findElement(By.xpath(".//*[@id='send2']")).click();
+	driver.findElement(By.id("send2")).click();
 	driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-	String mess2= driver.findElement(By.xpath(".//*[@id='advice-validate-email-email']")).getText();
+	String mess2= driver.findElement(By.id("advice-validate-email-email")).getText();
+	Assert.assertEquals(mess2, "Please enter a valid email address. For example johndoe@domain.com.");
+	//System.out.println("Pass TC_02");
+}
+
+@Test
+public void TC_03_LoginInvalidEmail() {
+	// Login Page Url matching
+	driver.navigate().refresh();
+	driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+	driver.findElement(By.id("email")).sendKeys("123423234@123455.123123");
+	driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+	driver.findElement(By.id("send2")).click();
+	driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+	String mess2= driver.findElement(By.id("advice-validate-email-email")).getText();
 	Assert.assertEquals(mess2, "Please enter a valid email address. For example johndoe@domain.com.");
 	//System.out.println("Pass TC_02");
 }
