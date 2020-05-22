@@ -45,9 +45,10 @@ public class TC05 {
 		Thread.sleep(3000);
 		String Title= driver.findElement(By.xpath(".//*[@class='dashboard']/div/h1")).getText();
 		String User_Name = driver.findElement(By.xpath(".//*[@class='hello']/strong")).getText();
-		//String Account	= driver.findElement(By.xpath(".//*[@class='box-content']/p[contains(text(),'Automation Testing')]")).getText();
+		String Account	= driver.findElement(By.xpath(".//*[@class='box-content']/p[contains(text(),'Automation Testing')]")).getText();
 		Assert.assertEquals(Title, "MY DASHBOARD");
 		Assert.assertEquals(User_Name, "Hello, Automation Testing!");
+		System.out.println(Account);
 		//Assert.assertEquals(Account, "Automation Testing");
 		Thread.sleep(3000);
 		//logout 
@@ -71,11 +72,11 @@ public class TC05 {
 		driver.findElement(By.cssSelector("#confirmation")).sendKeys("123456");
 		driver.findElement(By.xpath(".//*[@class='buttons-set']//button[@class='button']")).click();
 		Thread.sleep(3000);
-		String Title= driver.findElement(By.xpath(".//*[@class='dashboard']/div/h1")).getText();
+		String Success_Message= driver.findElement(By.xpath(".//*[@class='success-msg']//span")).getText();
 		String User_Name = driver.findElement(By.xpath(".//*[@class='hello']/strong")).getText();
 		//String Account	= driver.findElement(By.xpath(".//*[@class='box-content']/p[contains(text(),'Automation Testing')]")).getText();
-		Assert.assertEquals(Title, "MY DASHBOARD");
-		Assert.assertEquals(User_Name, "Hello, Automation Testing!");
+		Assert.assertEquals(Success_Message, "MY DASHBOARD");
+		Assert.assertEquals(User_Name, "Hello, Nguyen Van An");
 		//Assert.assertEquals(Account, "Automation Testing");
 		Thread.sleep(3000);
 		//logout 
