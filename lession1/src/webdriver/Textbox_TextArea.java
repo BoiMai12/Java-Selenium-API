@@ -2,7 +2,7 @@ package webdriver;
 
 
 import static org.testng.Assert.assertEquals;
-
+import static org.testng.Assert.assertFalse;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -19,8 +19,10 @@ public class Textbox_TextArea {
 	WebDriver driver;
 	String userID ="mngr265488";
 	String passWord ="vUnYnAj";
+//	String customerID ="8748";
 //	String userID, passWord;
-	String loginURL, name, dateOfBirth,address, city, state, pin, mobilenumber,email, pass, genderM, genderF, customerID;
+	String customerID;
+	String loginURL, name, dateOfBirth,address, city, state, pin, mobilenumber,email, pass, genderM, genderF;
 	By cusNameTextBox = By.name("name");
 	By maleRadio = By.xpath("//input[@value='m']");
 	By FemaleRadio = By.xpath("//input[@value='f']");
@@ -52,19 +54,23 @@ public class Textbox_TextArea {
 //	  System.setProperty("webdriver.chrome.driver", "D:\\BoiMai\\Class16\\01-Software\\chromedriver.exe");
 //	  driver = new ChromeDriver();
 	  driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-	  driver.manage().window().maximize();
+//	  driver.manage().window().maximize();
 	  driver.get("http://demo.guru99.com/v4/");
 	  loginURL = driver.getCurrentUrl();
 	  name ="Nguyen Van A";
-	  genderM="	male";
+	  genderM="male";
 	  dateOfBirth="1990-10-04";
-	  address = "Tran hung dao\nQuan Binh Thanh\nTp.hcm";
+	  address = "Tran hung dao\nQuan Binh Thanh\nTphcm";
 	  city = "TPHCM";
 	  state= "Binh thanh District";
 	  pin = "700000";
 	  mobilenumber="1411122222222";
 	  email="boi"+ randomNum() +"@yopmail.com";
 	  pass="1234556";
+	  
+	  //data to edit customer
+	  
+
 }
 
 public void TC01_Register() {
@@ -77,7 +83,7 @@ public void TC01_Register() {
 		
 }
 @Test
-	public void TC02_login() {
+public void TC02_login() {
 	driver.get(loginURL);
 	driver.findElement(By.name("uid")).sendKeys(userID);
 	driver.findElement(By.name("password")).sendKeys(passWord);
@@ -87,6 +93,8 @@ public void TC01_Register() {
 
 @Test
 public void TC03_createNewCustomer() {
+
+	
 	driver.findElement(By.xpath("//a[text()='New Customer']")).click();	
 	driver.findElement(cusNameTextBox).sendKeys(name);
 	driver.findElement(dateOfBirthTextBox).sendKeys(dateOfBirth);
@@ -97,22 +105,65 @@ public void TC03_createNewCustomer() {
 	driver.findElement(mobileNumberTextBox).sendKeys(mobilenumber);
 	driver.findElement(eMailTextBox).sendKeys(email);
 	driver.findElement(passTextBox).sendKeys(pass);
-	sleepInSecond(10);
+	
 	driver.findElement(By.name("sub")).click();
 //Assert.assertEquals(driver.findElement(By.xpath("//td/marquee")).getText(), "Welcome To Manager's Page of Guru99 Bank");
 	Assert.assertEquals(driver.findElement(By.xpath("//p[@class='heading3']")).getText(),"Customer Registered Successfully!!!");
 // check data after creating
 	customerID = driver.findElement(customerIDLocator).getText();
 	System.out.println(customerID);
-	Assert.assertEquals(cusNameLocator, name);
-	Assert.assertEquals(genderLocator, genderM);
-	Assert.assertEquals(dateOfBirthLocator, dateOfBirth);
-	Assert.assertEquals(addressLocator, address.replace("\n", " "));
-	Assert.assertEquals(cityLocator, city);
-	Assert.assertEquals(stateLocator, state);
-	Assert.assertEquals(pinLocator, pin);
-	Assert.assertEquals(mobileNumberLocator, mobilenumber);
-	Assert.assertEquals(eMailLocator, email);
+	Assert.assertEquals(driver.findElement(cusNameLocator).getText(), name);
+	Assert.assertEquals(driver.findElement(genderLocator).getText(), genderM);
+	Assert.assertEquals(driver.findElement(dateOfBirthLocator).getText(), dateOfBirth);
+	Assert.assertEquals(driver.findElement(addressLocator).getText(), address.replace("\n", " "));
+	Assert.assertEquals(driver.findElement(cityLocator).getText(), city);
+	Assert.assertEquals(driver.findElement(stateLocator).getText(), state);
+	Assert.assertEquals(driver.findElement(pinLocator).getText(), pin);
+	Assert.assertEquals(driver.findElement(mobileNumberLocator).getText(), mobilenumber);
+	Assert.assertEquals(driver.findElement(eMailLocator).getText(), email);
+	
+
+}
+
+@Test
+public void TC04_editNewCustomer() {
+	
+	
+	
+	driver.findElement(By.xpath("//a[text()='Edit Customer']")).click();
+	driver.findElement(By.name("cusid")).sendKeys(customerID);
+	driver.findElement(By.name("AccSubmit")).click();
+	Assert.assertFalse(driver.findElement(cusNameTextBox).isEnabled());
+	Assert.assertFalse(driver.findElement(By.name("gender")).isEnabled());
+	Assert.assertFalse(driver.findElement(dateOfBirthTextBox).isEnabled());
+	driver.findElement(addressTextBox).clear();
+	driver.findElement(addressTextBox).sendKeys("1200 Tran hung dao\nQuan Binh Thanh\nTphcm");
+	driver.findElement(cityTextBox).clear();
+	driver.findElement(cityTextBox).sendKeys("Hanoi");
+	driver.findElement(stateeTextBox).clear();
+	driver.findElement(stateeTextBox).sendKeys("Binh ChanhDistrict");
+	driver.findElement(pinTextBox).clear();
+	driver.findElement(pinTextBox).sendKeys("700011");
+	driver.findElement(mobileNumberTextBox).clear();
+	driver.findElement(mobileNumberTextBox).sendKeys("12345679999");
+	driver.findElement(eMailTextBox).clear();
+	driver.findElement(eMailTextBox).sendKeys(email);
+	sleepInSecond(10);
+	driver.findElement(By.name("sub")).click();
+//Assert.assertEquals(driver.findElement(By.xpath("//td/marquee")).getText(), "Welcome To Manager's Page of Guru99 Bank");
+	Assert.assertEquals(driver.findElement(By.xpath("//p[@class='heading3']")).getText(),"Customer details updated Successfully!!!");
+// check data after editing
+	Assert.assertEquals(driver.findElement(customerIDLocator).getText(), customerID);
+	Assert.assertEquals(driver.findElement(cusNameLocator).getText(), name);
+	Assert.assertEquals(driver.findElement(genderLocator).getText(), genderM);
+	Assert.assertEquals(driver.findElement(dateOfBirthLocator).getText(), dateOfBirth);
+	Assert.assertEquals(driver.findElement(addressLocator).getText(), "1200 Tran hung dao\nQuan Binh Thanh\nTphcm".replace("\n", " "));
+	Assert.assertEquals(driver.findElement(cityLocator).getText(), "Hanoi");
+	Assert.assertEquals(driver.findElement(stateLocator).getText(), "Binh ChanhDistrict");
+	Assert.assertEquals(driver.findElement(pinLocator).getText(), "700011");
+	Assert.assertEquals(driver.findElement(mobileNumberLocator).getText(), "12345679999");
+	Assert.assertEquals(driver.findElement(eMailLocator).getText(), email);
+	
 }
 	
 	
