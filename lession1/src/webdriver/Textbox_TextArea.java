@@ -123,6 +123,7 @@ public void TC03_createNewCustomer() {
 	Assert.assertEquals(driver.findElement(eMailLocator).getText(), email);
 	
 
+<<<<<<< HEAD
 }
 
 @Test
@@ -164,6 +165,8 @@ public void TC04_editNewCustomer() {
 	Assert.assertEquals(driver.findElement(mobileNumberLocator).getText(), "12345679999");
 	Assert.assertEquals(driver.findElement(eMailLocator).getText(), email);
 	
+=======
+>>>>>>> branch 'master' of https://github.com/BoiMai12/Java-Selenium-API.git
 }
 	
 	
