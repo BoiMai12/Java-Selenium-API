@@ -78,7 +78,7 @@ public void TC_02_selectMultipleValue() {
 	Assert.assertEquals(optionSelected, 0);
 	
 }
-//check
+//check github conflict
 @Test
 public void TC_03_HTMLdropdownList() {
 	driver.get("https://demo.nopcommerce.com/register");
