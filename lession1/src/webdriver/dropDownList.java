@@ -78,9 +78,9 @@ public void TC_02_selectMultipleValue() {
 	Assert.assertEquals(optionSelected, 0);
 	
 }
-
+//check
 @Test
-public void TC_04_HTMLdropdownList() {
+public void TC_03_HTMLdropdownList() {
 	driver.get("https://demo.nopcommerce.com/register");
 	
 	String email = "emily"+randomNum()+"@yopmail.com";
