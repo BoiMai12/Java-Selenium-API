@@ -7,10 +7,15 @@ import java.util.concurrent.TimeUnit;
 
 import org.testng.annotations.BeforeClass;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
@@ -19,12 +24,19 @@ public class dropDownList {
 
 	WebDriver driver;
 	Select select;
+	WebDriverWait expliciWait;
+	JavascriptExecutor jsExecutor;
+	
 	
 @BeforeClass
 public void beforeClass() {
 	driver = new FirefoxDriver();
+//	System.setProperty("webdriver.chrome.driver", "D:\\BoiMai\\Class16\\01-Software\\chromedriver.exe");
+//	driver = new ChromeDriver();
+	expliciWait = new WebDriverWait(driver, 30);
 	driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	
+	jsExecutor = (JavascriptExecutor) driver;
 }
 
 public void TC_01_selectOneValue() {
@@ -79,7 +91,7 @@ public void TC_02_selectMultipleValue() {
 	
 }
 //check github conflict
-@Test
+
 public void TC_03_HTMLdropdownList() {
 	driver.get("https://demo.nopcommerce.com/register");
 	
@@ -118,12 +130,102 @@ public void TC_03_HTMLdropdownList() {
 }
 
 
+public void TC_04_jQuery() {
+	driver.get("http://jqueryui.com/resources/demos/selectmenu/default.html");
+	
+	selectItemInDropdown("//span[@id='number-button']", "//ul[@id='number-menu']//div", "5");
+	Assert.assertTrue(driver.findElement(By.xpath("//span[@id='number-button']/span[@class='ui-selectmenu-text'] and text()=5")).isDisplayed());
+		
+}
+
+
+public void TC_05_Angular() {
+	driver.get("https://bit.ly/2UV2vYi");
+	
+	selectItemInDropdown("//ejs-dropdownlist[@id='games']//span[contains(@class, 'e-search-icon')]", ".//ul[@id='games_options']/li", "Football");
+	Assert.assertEquals(getHiddenText("select[id='games_hidden'] option"), "Football");
+	
+	selectItemInDropdown("//ejs-dropdownlist[@id='games']//span[contains(@class, 'e-search-icon')]", ".//ul[@id='games_options']/li", "Golf");
+	Assert.assertEquals(getHiddenText("select[id='games_hidden'] option"), "Golf");
+}
+
+
+public void TC_07_VueJS(){
+	
+	driver.get("https://mikerodham.github.io/vue-dropdowns/");
+	selectItemInDropdown("//li[@class='dropdown-toggle']", "//ul[@class='dropdown-menu']//a","Second Option");
+	Assert.assertEquals(driver.findElement(By.xpath("//li[@class='dropdown-toggle']")).getText(), "Second Option");
+	
+	
+}
+//TC_07_VueJS
+
+public void TC_06_ReactJS() {
+	driver.get("https://react.semantic-ui.com/maximize/dropdown-example-selection/");
+	
+	selectItemInDropdown("//div[@role='listbox']", "//div[contains(@class, 'item')]","Christian" );
+	Assert.assertTrue(driver.findElement(By.xpath("//div[@class='text']")).isDisplayed());
+	
+}
+
+@Test
+public void TC_08_editDropdownJQ(){
+	
+	driver.get("http://indrimuska.github.io/jquery-editable-select/");
+
+
+	sendKeyToEditDropdown("//div[@id='default-place']/input", "Audi");
+	Assert.assertEquals(getHiddenText("#default-place li.es-visible"), "Audi");
+	
+	sendKeyToEditDropdown("///div[@id='default-place']/input", "BMW");
+	Assert.assertEquals(getHiddenText("#default-place li.es-visible"), "BMW");
+	
+}
+
+
 @AfterClass
 public void closeBrowser() {
 	driver.quit();
 	
 }
+
+public void selectItemInDropdown(String parentLocator, String itemLocators, String expectedItem) {
+	//find element to click
+	expliciWait.until(ExpectedConditions.elementToBeClickable(By.xpath(parentLocator)));
+	driver.findElement(By.xpath(parentLocator)).click();
+	sleepInSecond(1);
+	//get all item in the list
+	expliciWait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(itemLocators)));
+	List <WebElement> allItems = driver.findElements(By.xpath(itemLocators));
+	System.out.println("the number of the array is " + allItems.size());
+	for (WebElement item : allItems) {
+		String actualItem = item.getText();
+//		System.out.println(actualItem);
+		if (actualItem.equals(expectedItem)) {
+			//Berfore select item, user scroll
+			jsExecutor.executeScript("arguments[0].scrollIntoView(true);", item);
+			sleepInSecond(2);
+			expliciWait.until(ExpectedConditions.elementToBeClickable(item));
+			item.click();
+			sleepInSecond(2);
+			break;
+		}
+	}
 	
+}
+
+public String getHiddenText(String cssLocator) {
+	return (String) jsExecutor.executeScript("return document.querySelector(\"" + cssLocator + "\").textContent");
+}
+
+public void sendKeyToEditDropdown(String locator, String value) {
+	driver.findElement(By.xpath(locator)).clear();
+	driver.findElement(By.xpath(locator)).sendKeys(value);
+	sleepInSecond(1);
+	driver.findElement(By.xpath(locator)).sendKeys(Keys.TAB);
+	sleepInSecond(1);
+	
+}
 public void sleepInSecond(long time) {
 	try {
 		Thread.sleep(time*1000);
