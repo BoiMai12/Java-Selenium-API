@@ -177,7 +177,7 @@ public void TC_08_editDropdownJQ(){
 	sendKeyToEditDropdown("//div[@id='default-place']/input", "Audi");
 	Assert.assertEquals(getHiddenText("#default-place li.es-visible"), "Audi");
 	
-	sendKeyToEditDropdown("///div[@id='default-place']/input", "BMW");
+	sendKeyToEditDropdown("//div[@id='default-place']/input", "BMW");
 	Assert.assertEquals(getHiddenText("#default-place li.es-visible"), "BMW");
 	
 }
